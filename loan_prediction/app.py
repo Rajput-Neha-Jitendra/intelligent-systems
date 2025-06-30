@@ -6,11 +6,11 @@ import numpy as np
 with open('loan_prediction/loan_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-with open('encoders.pkl', 'rb') as f:
+with open('loan_prediction/encoders.pkl', 'rb') as f:
     encoders = pickle.load(f)
 
 # 📈 Load accuracy
-with open("model_accuracy.txt", "r") as f:
+with open("loan_prediction/model_accuracy.txt", "r") as f:
     accuracy = f.read()
 
 # 🎨 Page Design
