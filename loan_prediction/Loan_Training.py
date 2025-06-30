@@ -1,91 +1,85 @@
-import streamlit as st
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 import pickle
-import numpy as np
 
-# 🔌 Load trained model
-with open('loan_model.pkl', 'rb') as f:
-    model = pickle.load(f)
+# 📥 Load dataset
+df = pd.read_csv('loanp.csv')
 
-with open('encoders.pkl', 'rb') as f:
-    encoders = pickle.load(f)
-
-# 📈 Load accuracy
-with open("model_accuracy.txt", "r") as f:
-    accuracy = f.read()
-
-# 🎨 Page Design
-st.set_page_config(page_title="Loan Approval Predictor", layout="centered")
-
-st.markdown("""
-    <style>
-        .title {text-align: center; color: #e91e63; font-size: 36px; font-weight: bold;}
-        .subtitle {text-align: center; font-size: 18px;  margin-bottom: 30px;}
-        .footer {text-align: center; margin-top: 50px; font-size: 16px;}
-    </style>
-""", unsafe_allow_html=True)
-
-# 🏦 Title and Subtitle
-st.markdown('<div class="title">🏦 Loan Approval Predictor</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Enter your details to check loan approval chances</div>', unsafe_allow_html=True)
-
-# 📊 Model Accuracy
-st.markdown(f"<h5 style='text-align: center;'>📊 Model Info</h5><h6 style='text-align: center;'>🔍 Trained on 7 features with <span style='color:green;'>{accuracy}</span> accuracy</h6>", unsafe_allow_html=True)
+# 🧹 Fill missing values with appropriate methods
+df['Gender'] = df['Gender'].fillna(df['Gender'].mode()[0])
+df['Married'] = df['Married'].fillna(df['Married'].mode()[0])
+df['Self_Employed'] = df['Self_Employed'].fillna(df['Self_Employed'].mode()[0])
+df['LoanAmount'] = df['LoanAmount'].fillna(df['LoanAmount'].mean())
+df['Education'] = df['Education'].fillna(df['Education'].mode()[0])
+df['Credit_History'] = df['Credit_History'].fillna(df['Credit_History'].mode()[0])
 
 
-# 📥 User Inputs
-gender = st.selectbox("Gender", ["Male", "Female"])
-married = st.selectbox("Married", ["Yes", "No"])
-education = st.selectbox("Education", ["Graduate", "Not Graduate"])
-self_employed = st.selectbox("Self Employed", ["Yes", "No"])
-applicant_income = st.number_input("Applicant Income", min_value=0)
-loan_amount = st.number_input("Loan Amount (in thousands)", min_value=0)
-credit_history = st.selectbox("Credit History", ["Yes (Good)", "No (Bad or None)"])
+# 🛠 Convert Credit_History to integer
+df['Credit_History'] = df['Credit_History'].astype(int)
 
-st.info("⚠️ Please provide actual information. Prediction is only an estimate!")
 
-# 🔁 Encoding user input
-gender = 1 if gender == "Male" else 0
-married = 1 if married == "Yes" else 0
-education = 1 if education == "Graduate" else 0
-self_employed = 1 if self_employed == "Yes" else 0
-credit_history = 1 if credit_history == "Yes (Good)" else 0
+# Encode each column with its own encoder
+le_gender = LabelEncoder()
+df['Gender'] = le_gender.fit_transform(df['Gender'])
 
-# 🧠 Feature vector
-features = np.array([[gender, married, education, self_employed, applicant_income, loan_amount, credit_history]])
+le_married = LabelEncoder()
+df['Married'] = le_married.fit_transform(df['Married'])
 
-# 📏 Scale input using saved scaler
-scaler = encoders['scaler']
-features_scaled = scaler.transform(features)
+le_education = LabelEncoder()
+df['Education'] = le_education.fit_transform(df['Education'])
 
-# 🔍 Predict Button
-if st.button("🔍 Predict Loan Status"):
-    prediction = model.predict(features_scaled)
+le_self_emp = LabelEncoder()
+df['Self_Employed'] = le_self_emp.fit_transform(df['Self_Employed'])
 
-    if prediction[0] == 1:
-        result = "🎉 Congratulations! Your Loan is Approved ✅"
-        bg = "#d1e7dd"
-        color = "#0f5132"
-    else:
-        result = "❌ Sorry! Your Loan Application is Rejected"
-        bg = "#f8d7da"
-        color = "#842029"
+le_status = LabelEncoder()
+df['Loan_Status'] = le_status.fit_transform(df['Loan_Status'])
 
-    # 🖼️ Show Result
-    st.markdown(f"""
-        <div style="
-            background-color: {bg};
-            color: {color};
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        ">
-            {result}
-        </div>
-    """, unsafe_allow_html=True)
 
-# 👣 Footer
-st.markdown('<div class="footer">Made with ❤️ by Neha | ML Loan Prediction using Logistic Regression 🚀</div>', unsafe_allow_html=True)
+
+# 🎯 Features and target
+X = df[['Gender', 'Married', 'Education', 'Self_Employed', 'ApplicantIncome', 'LoanAmount', 'Credit_History']]
+y = df['Loan_Status']
+
+# 🔀 Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 📏 Feature Scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 🤖 Model training
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# 💾 Save model and scaler
+with open('loan_model.pkl', 'wb') as f:
+    pickle.dump(model, f)
+
+# Save all encoders
+encoders = {
+    'gender': le_gender,
+    'married': le_married,
+    'education': le_education,
+    'self_emp': le_self_emp,
+    'status': le_status
+}
+
+# Save model and encoders
+
+with open('encoders.pkl', 'wb') as f:
+    pickle.dump({**encoders, 'scaler': scaler}, f)
+
+# 📈 Evaluation
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+
+# 💾 Save accuracy score
+with open("model_accuracy.txt", "w") as f:
+    f.write(f"{round(accuracy * 100, 2)}%")
+
+print(f"✅ Model Accuracy: {round(accuracy * 100, 2)}%")
+print("🎉 Model,Accuracy, encoders, and scaler saved successfully!")
