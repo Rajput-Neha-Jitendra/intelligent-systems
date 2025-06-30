@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 
 # 🔌 Load trained model
-with open('loan_model.pkl', 'rb') as f:
+with open('loan_prediction/loan_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 with open('encoders.pkl', 'rb') as f:
