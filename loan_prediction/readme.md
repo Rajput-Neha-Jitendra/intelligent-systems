@@ -1,10 +1,10 @@
 
 # 📊 Loan Prediction App using Machine Learning
 A simple and user-friendly Streamlit web app that predicts whether a loan will be approved or not based on user inputs like income, credit history, education, and more.
----
+
 ## 🚀 Live App
-🔗 [Click here to try the live app]('https://smartloan-predictor.streamlit.app/')
----
+[Click here to open the Loan Prediction App](https://smartloan-predictor.streamlit.app/)
+
 ## 🧠 Project Overview
 This project uses a trained **Logistic Regression model** to classify whether a loan application will be approved. The backend is built in Python using `scikit-learn`, and the frontend is created using `Streamlit`.
 ---
@@ -55,17 +55,11 @@ loan_prediction/
    ```bash
    streamlit run app.py
    ```
-
-
-
+   
 ## ✅ Demo Screenshot
-
 ![Loan Prediction App Screenshot](https://github.com/Rajput-Neha-Jitendra/intelligent-systems/blob/main/loan_prediction/screencapture-smartloan-predictor-streamlit-app.png)  
-
-
 ---
 
 ## 👤 Author
-
 **Neha Jitendra Rajput**  
 🎓 MCA Student, IMRD Shirpur
