@@ -60,7 +60,7 @@ loan_prediction/
 
 ## ✅ Demo Screenshot
 
-![Loan Prediction App Screenshot]()  
+![Loan Prediction App Screenshot](https://github.com/Rajput-Neha-Jitendra/intelligent-systems/blob/main/loan_prediction/screencapture-smartloan-predictor-streamlit-app.png)  
 
 
 ---
