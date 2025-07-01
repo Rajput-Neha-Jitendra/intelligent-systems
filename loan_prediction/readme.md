@@ -60,8 +60,8 @@ loan_prediction/
 
 ## ✅ Demo Screenshot
 
-![Loan Prediction App Screenshot](app_screenshot.png)  
-> _(Add a screenshot image to your repo named `app_screenshot.png` if you want this to show)_
+![Loan Prediction App Screenshot]()  
+
 
 ---
 
