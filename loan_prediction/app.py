@@ -88,7 +88,19 @@ self_employed = st.selectbox("Self Employed", ["Yes", "No"])
 applicant_income = st.number_input("Applicant Income", min_value=0)
 loan_amount = st.number_input("Loan Amount (in thousands)", min_value=0)
 credit_history = st.selectbox("Credit History", ["Yes (Good)", "No (Bad or None)"])
-st.info("Please select correct credit history — it affects approval and may be verified.")
+st.markdown("""
+<div style="
+    background-color:#e3f2fd;
+    color:#0d47a1;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin:10px;
+    font-size: 15px;
+">
+ <strong>Please select correct credit history — The bank checks this and decides your loan approval request.</strong>
+</div>
+""", unsafe_allow_html=True)
+
 
 # 🔁 Encoding user input
 gender = 1 if gender == "Male" else 0
@@ -97,10 +109,10 @@ education = 1 if education == "Graduate" else 0
 self_employed = 1 if self_employed == "Yes" else 0
 credit_history = 1 if credit_history == "Yes (Good)" else 0
 
-# 🧠 Feature 
+# 🧠 Feature vector
 features = np.array([[gender, married, education, self_employed, applicant_income, loan_amount, credit_history]])
 
-# 📏 Scale input 
+# 📏 Scale input using saved scaler
 scaler = encoders['scaler']
 features_scaled = scaler.transform(features)
 
@@ -110,12 +122,12 @@ if st.button("🔍 Predict Loan Status"):
 
     if prediction[0] == 1:
         result = "🎉 Congratulations! Your Loan is Approved ✅"
-        bg = "#1976d2"       # Soft pink (background)
-        color = "white"    # Deep rose text
+        bg = "#e3f2fd"       
+        color = "#0d47a1"    
     else:
         result = "❌ Sorry! Your Loan Application is Rejected"    
-        bg = "#1976d2"       # Muted pink-red (like soft warning)
-        color = "white"    # Dark muted red (professional but themed)
+        bg = "#e3f2fd"       
+        color = "#0d47a1"    
         
     # 🖼️ Show Result
     st.markdown(f"""
@@ -137,3 +149,12 @@ if st.button("🔍 Predict Loan Status"):
 
 # Footer
 st.markdown('<div class="footer">Made with ❤️ by Neha | Loan Approval Prediction using ML Logistic Regression🚀</div>', unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+
