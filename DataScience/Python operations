@@ -1,0 +1,20 @@
+import numpy as np
+# Basic operations
+a = 10
+b = 5
+print("Addition:", a + b)
+print("Subtraction:", a - b)
+print("Multiplication:", a * b)
+print("Division:", a / b)
+
+# Calculating statistics
+data = np.array([1,2,3,4,4])
+mean = np.mean(data)
+median = np.median(data)
+population_variance = np.var(data)
+sample_variance = np.var(data, ddof=1)
+
+print("Mean:", mean)
+print("Median:", median)
+print("Population Variance",population_variance)
+print("Sample Variance",sample_variance)
