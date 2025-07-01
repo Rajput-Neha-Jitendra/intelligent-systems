@@ -148,9 +148,11 @@ if st.button("🔍 Predict Loan Status"):
     """, unsafe_allow_html=True)
 
 # Footer
-st.markdown('<div class="footer">Made with <span style='color:red;'>❤️ </span>by Neha | Loan Approval Prediction using ML Logistic Regression🚀</div>', unsafe_allow_html=True)
-
-
+st.markdown("""
+<div class="footer">
+    Made with <span style="color:red;">❤️</span> by Neha | Loan Approval Prediction using ML Logistic Regression 🚀
+</div>
+""", unsafe_allow_html=True)
 
 
 
